@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Approved Doctors | Healthcare System</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍⚕️</text></svg>">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #3a7bd5;
+      --primary-dark: #2a5db0;
+      --secondary: #00d2ff;
+      --accent: #ffc107;
+      --success: #2a9d8f;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --white: #ffffff;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --card-shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .page-header h2 {
+      color: var(--primary-dark);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .page-header::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 4px;
+      background: var(--secondary);
+      margin: 1rem auto;
+      border-radius: 2px;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.8rem 1.2rem 0.8rem 3rem;
+      border: 2px solid var(--light-gray);
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: var(--card-shadow);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .doctors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .doctor-card {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border-left: 4px solid var(--primary);
+    }
+
+    .doctor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .doctor-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .doctor-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+
+    .doctor-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--primary-dark);
+    }
+
+    .doctor-specialty {
+      color: var(--success);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .doctor-about {
+      color: var(--gray);
+      margin: 1rem 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .view-profile-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .view-profile-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--gray);
+      background: var(--light-gray);
+      border-radius: 10px;
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--gray);
+    }
+     a.back-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 2rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    a.back-link i {
+      margin-right: 0.5rem;
+    }
+
+    a.back-link:hover {
+      color: var(--primary-dark);
+      transform: translateX(-5px);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+      }
+      
+      .page-header h2 {
+        font-size: 1.8rem;
+      }
+      
+      .doctors-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button onclick="history.back()" style="background: none; border: none; color: var(--primary-color); font-weight: 500; margin-bottom: 1rem; cursor: pointer; font-size: 0.9rem; padding: 0;">
+    ← Back
+  </button> 
+    <div class="page-header" data-aos="fade-down">
+      <h2><i class="fas fa-user-md"></i> Approved Doctors</h2>
+    </div>
+
+    <form method="GET" action="{{ url_for('patient.view_doctors') }}" class="search-container" data-aos="fade-up">
+      <i class="fas fa-search search-icon"></i>
+      <input 
+        type="text" 
+        name="search_query"
+        class="search-input"
+        placeholder="Search doctors by name or specialization..."
+        value="{{ request.args.get('search_query', '') }}"
+        onkeyup="this.form.submit()"
+      >
+    </form>
+
+    <div class="doctors-grid">
+      {% for doctor in doctors %}
+        <div class="doctor-card" data-aos="fade-up">
+          <div class="doctor-header">
+            <div class="doctor-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div>
+              <h3 class="doctor-name">{{ doctor.full_name }}</h3>
+              <div class="doctor-specialty">
+                <i class="fas fa-stethoscope"></i> {{ doctor.specialization or "General Practitioner" }}
+              </div>
+            </div>
+          </div>
+          
+          <p class="doctor-about">
+            {{ doctor.about or "No description provided." }}
+          </p>
+          
+          <a href="{{ url_for('patient.doctor_profile', doctor_id=doctor._id) }}" class="view-profile-btn">
+            <i class="fas fa-eye"></i> View Profile
+          </a>
+        </div>
+      {% else %}
+        <div class="empty-state" data-aos="fade-in">
+          <i class="fas fa-user-md"></i>
+          <h3>No Doctors Found</h3>
+          <p>No doctors match your search criteria</p>
+        </div>
+      {% endfor %}
+    </div>
+        <a href="{{ url_for('patient.dashboard') }}" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+  </div>
+  </div>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ 
+      once: true,
+      duration: 800,
+      easing: 'ease-out-quart'
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Management | Healthcare System</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👥</text></svg>">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #3a7bd5;
+      --primary-dark: #2a5db0;
+      --secondary: #00d2ff;
+      --danger: #e63946;
+      --success: #2a9d8f;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --white: #ffffff;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --card-shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+      margin: 0;
+      padding: 2rem;
+      min-height: 100vh;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .page-header h2 {
+      color: var(--primary-dark);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .page-header::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 4px;
+      background: var(--secondary);
+      margin: 1rem auto;
+      border-radius: 2px;
+    }
+
+    .patients-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .patient-card {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border-left: 4px solid var(--primary);
+    }
+
+    .patient-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .patient-info {
+      margin-bottom: 1rem;
+    }
+
+    .patient-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .patient-name i {
+      color: var(--primary);
+    }
+
+    .patient-email {
+      color: var(--gray);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .patient-email i {
+      width: 1rem;
+    }
+
+    .action-btns {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background: #c1121f;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--gray);
+      background: var(--light-gray);
+      border-radius: 10px;
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--gray);
+    }
+     a.back-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 2rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    a.back-link i {
+      margin-right: 0.5rem;
+    }
+
+    a.back-link:hover {
+      color: var(--primary-dark);
+      transform: translateX(-5px);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1.5rem;
+      }
+      
+      .patients-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-header h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+          <a href="{{ url_for('admin.dashboard') }}" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+    <div class="page-header" data-aos="fade-down">
+      <h2><i class="fas fa-users"></i> Patient Management</h2>
+    </div>
+
+    <ul class="patients-list">
+      {% for patient in patients %}
+        <li class="patient-card" data-aos="fade-up">
+          <div class="patient-info">
+            <div class="patient-name">
+              <i class="fas fa-user"></i>
+              {{ patient.full_name }}
+            </div>
+            <div class="patient-email">
+              <i class="fas fa-envelope"></i>
+              {{ patient.email }}
+            </div>
+          </div>
+          <div class="action-btns">
+            <a href="{{ url_for('admin.delete_patient', patient_id=patient._id) }}" class="btn btn-danger">
+              <i class="fas fa-trash-alt"></i> Delete Patient
+            </a>
+          </div>
+        </li>
+      {% else %}
+        <li class="empty-state" data-aos="fade-in">
+          <i class="fas fa-user-slash"></i>
+          <h3>No Patients Found</h3>
+          <p>There are currently no patients registered in the system</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ 
+      once: true,
+      duration: 800,
+      easing: 'ease-out-quart'
+    });
+  </script>
+</body>
+</html>

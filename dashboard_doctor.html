@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Dashboard | Medical Portal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍⚕️</text></svg>">
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- AOS CSS for animations -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2a7fba;
+      --primary-dark: #1a6fa8;
+      --secondary: #ffc107;
+      --danger: #e63946;
+      --success: #2a9d8f;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --white: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --whatsapp: #25D366;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+      margin: 0;
+      min-height: 100vh;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    nav {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: var(--white);
+      margin-right: 1.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+    }
+
+    nav a:hover {
+      color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    nav a i {
+      font-size: 1.1rem;
+    }
+
+    nav a span {
+      position: absolute;
+      top: -5px;
+      right: -15px;
+      background: var(--danger);
+      color: var(--white);
+      padding: 0.2rem 0.6rem;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .header::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 4px;
+      background: var(--secondary);
+      margin: 1rem auto;
+      border-radius: 2px;
+    }
+
+    h2 {
+      color: var(--primary);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    h3 {
+      color: var(--primary-dark);
+      margin: 2.5rem 0 1.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--secondary);
+    }
+
+    .revenue-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border-left: 5px solid var(--success);
+    }
+
+    .revenue-card h3 {
+      color: var(--success);
+      margin: 0 0 1rem;
+      font-size: 1.2rem;
+    }
+
+    .revenue-card .amount {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--success);
+      color: var(--white);
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .add-btn:hover {
+      background: #21867a;
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: var(--white);
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    ul li:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--primary);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .available {
+      background: rgba(42, 157, 143, 0.2);
+      color: var(--success);
+    }
+
+    .pending {
+      background: rgba(255, 193, 7, 0.2);
+      color: #ff9800;
+    }
+
+    .ongoing {
+      background: rgba(42, 127, 186, 0.2);
+      color: var(--primary);
+    }
+
+    .action-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn i {
+      font-size: 0.875rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      color: var(--white);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: var(--white);
+    }
+
+    .btn-danger:hover {
+      background: #c1121f;
+      color: var(--white);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+    }
+
+    .btn-success:hover {
+      background: #21867a;
+      color: var(--white);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .whatsapp-btn {
+      background: var(--whatsapp);
+      color: var(--white);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      color: var(--white);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+      background: var(--light-gray);
+      border-radius: 8px;
+    }
+
+    .empty-state i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--gray);
+    }
+
+    /* Enhanced Ongoing Appointments Styles */
+    .appointment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    
+    .patient-info {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .prescription-section {
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    .prescription-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .prescription-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 5px;
+      border: 1px solid var(--light-gray);
+      font-family: 'Poppins', sans-serif;
+      resize: vertical;
+      min-height: 100px;
+      transition: all 0.3s ease;
+    }
+    
+    .prescription-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(42, 127, 186, 0.2);
+    }
+    
+    .prescription-display {
+      margin-top: 0.5rem;
+      background: #f1f3f5;
+      padding: 0.75rem;
+      border-radius: 5px;
+      border-left: 3px solid var(--success);
+    }
+    
+    .prescription-display p {
+      margin: 0.5rem 0 0;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem;
+        justify-content: center;
+      }
+      
+      nav a {
+        margin: 0.5rem;
+      }
+      
+      .container {
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav data-aos="fade-down">
+    <a href="{{ url_for('doctor.dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="{{ url_for('doctor.profile') }}"><i class="fas fa-user"></i> Profile</a>
+    <a href="{{ url_for('doctor.view_history') }}"><i class="fas fa-history"></i>History</a>
+    <!-- Chat with Admin with Unread Badge -->
+    <a href="{{ url_for('chat.chat', receiver_id=admin_id) }}">
+      <i class="fas fa-comments"></i> Chat with Admin
+      {% if admin_unread_count > 0 %}
+        <span>{{ admin_unread_count }}</span>
+      {% endif %}
+    </a>
+    <a href="{{ url_for('auth.change_password') }}"><i class="fas fa-key"></i> Change Password</a>
+    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+
+  <div class="container" data-aos="fade-up">
+    <div class="header">
+      <h2 data-aos="fade-down">Doctor Dashboard</h2>
+    </div>
+    
+    <div class="revenue-card" data-aos="zoom-in">
+      <h3>Total Revenue</h3>
+      <div class="amount">₹{{ total_revenue }}</div>
+    </div>
+
+    <h3 data-aos="fade-right"><i class="far fa-calendar-alt"></i> Your Available Slots</h3>
+    <a href="{{ url_for('doctor.add_slot') }}" class="add-btn" data-aos="fade-left">
+      <i class="fas fa-plus"></i> Add New Slot
+    </a>
+    <ul>
+      {% for slot in slots %}
+        {% if not slot.is_booked %}
+          <li data-aos="fade-up" data-aos-duration="600">
+            <strong><i class="far fa-clock"></i> {{ slot.date }} {{ slot.time }}</strong>
+            <span class="status-badge available">Available</span>
+            <div class="action-btns">
+              <form action="{{ url_for('doctor.delete_slot', slot_id=slot._id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger" style="border:none;cursor:pointer;">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+          </li>
+        {% endif %}
+      {% else %}
+        <li class="empty-state" data-aos="fade-in">
+          <i class="far fa-calendar-times"></i>
+          <p>No available slots yet.</p>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h3 data-aos="fade-right"><i class="fas fa-hourglass-half"></i> Pending Appointments</h3>
+    <ul>
+      {% for appt in pending_appointments %}
+        <li data-aos="fade-up" data-aos-duration="600">
+          <strong><i class="fas fa-user-injured"></i> Patient:</strong> {{ appt.patient_name }}<br>
+          <strong><i class="far fa-calendar"></i> Date:</strong> {{ appt.date }}<br>
+          <strong><i class="far fa-clock"></i> Time:</strong> {{ appt.slot_time }}<br>
+          <strong><i class="fas fa-info-circle"></i> Status:</strong> 
+          <span class="status-badge pending">{{ appt.status }}</span>
+          
+          <div class="action-btns">
+            <a href="{{ url_for('doctor.approve_appointment', appointment_id=appt._id) }}" class="btn btn-success">
+              <i class="fas fa-check"></i> Approve
+            </a>
+            <a href="{{ url_for('doctor.reject_appointment', appointment_id=appt._id) }}" class="btn btn-danger">
+              <i class="fas fa-times"></i> Reject
+            </a>
+            {% if appt.patient_report_file %}
+              <a href="{{ url_for('static', filename='uploads/' ~ appt.patient_report_file) }}" download class="btn btn-outline">
+                <i class="fas fa-file-download"></i> Patient Report
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% else %}
+        <li class="empty-state" data-aos="fade-in">
+          <i class="far fa-smile"></i>
+          <p>No pending appointments.</p>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h3 data-aos="fade-right"><i class="fas fa-procedures"></i> Ongoing Appointments</h3>
+    <ul>
+      {% for appt in ongoing_appointments %}
+        <li data-aos="fade-up" data-aos-duration="600">
+          <div class="appointment-header">
+            <div class="patient-info">
+              <strong><i class="fas fa-user-injured"></i> Patient:</strong> {{ appt.patient_name }}<br>
+              <strong><i class="far fa-calendar"></i> Date:</strong> {{ appt.date }}<br>
+              <strong><i class="far fa-clock"></i> Time:</strong> {{ appt.slot_time }}
+            </div>
+            <span class="status-badge ongoing">{{ appt.status }}</span>
+          </div>
+          
+          <div class="action-btns">
+            <div class="btn-group">
+              <a href="{{ url_for('doctor.complete_appointment', appointment_id=appt._id) }}" class="btn btn-primary">
+                <i class="fas fa-check-circle"></i> Mark Completed
+              </a>
+              
+              {% if appt.patient_report_file %}
+                <a href="{{ url_for('static', filename='uploads/' ~ appt.patient_report_file) }}" download class="btn btn-outline">
+                  <i class="fas fa-file-download"></i> Patient Report
+                </a>
+              {% endif %}
+              
+              {% if appt.doctor_report_file %}
+                <a href="{{ url_for('static', filename='uploads/' ~ appt.doctor_report_file) }}" download class="btn btn-outline">
+                  <i class="fas fa-file-medical"></i> My Report
+                </a>
+              {% else %}
+                <a href="{{ url_for('doctor.upload_report', appointment_id=appt._id) }}" class="btn btn-success">
+                  <i class="fas fa-file-upload"></i> Add Report
+                </a>
+              {% endif %}
+              
+              {% if appt.patient_whatsapp %}
+                <a href="https://wa.me/{{ appt.patient_whatsapp }}?text=Hello {{ appt.patient_name }}, I have an update about your appointment on {{ appt.date }} at {{ appt.slot_time }}."
+                   target="_blank"
+                   class="btn whatsapp-btn">
+                  <i class="fab fa-whatsapp"></i> Chat Patient
+                </a>
+              {% endif %}
+            </div>
+            
+            <div class="prescription-section">
+              {% if not appt.doctor_prescription %}
+                <form action="{{ url_for('doctor.add_prescription', appointment_id=appt._id) }}" method="POST" class="prescription-form">
+                  <textarea name="prescription" placeholder="Write prescription (max 100 words)" rows="3" maxlength="600"
+                    class="prescription-textarea"></textarea>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Prescription
+                  </button>
+                </form>
+              {% else %}
+                <div class="prescription-display">
+                  <strong>Prescription:</strong>
+                  <p>{{ appt.doctor_prescription }}</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      {% else %}
+        <li class="empty-state" data-aos="fade-in">
+          <i class="far fa-smile"></i>
+          <p>No ongoing appointments.</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ 
+      once: true,
+      duration: 800,
+      easing: 'ease-out-quart'
+    });
+  </script>
+</body>
+</html>

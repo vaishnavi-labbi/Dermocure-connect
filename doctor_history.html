@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Appointment History | MediConnect</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4f9cf9;
+      --primary-dark: #3a7bc8;
+      --primary-light: #e6f1ff;
+      --secondary: #f37a6f;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    nav {
+      background: var(--primary);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: white;
+      margin-right: 25px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav a:hover {
+      color: var(--warning);
+      transform: translateY(-2px);
+    }
+
+    nav a i {
+      font-size: 0.9rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 25px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .page-header h2 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 15px;
+      display: inline-block;
+      position: relative;
+    }
+
+    .page-header h2::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      background: var(--primary);
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .search-container {
+      max-width: 500px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    #searchInput {
+      display: block;
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border: 2px solid var(--light-gray);
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: var(--transition);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    #searchInput:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 5px 15px rgba(79, 156, 249, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .history-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .appointment-card {
+      background: white;
+      margin-bottom: 20px;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .appointment-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .appointment-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .meta-item i {
+      color: var(--primary);
+      font-size: 0.9rem;
+      width: 16px;
+      text-align: center;
+    }
+
+    .patient-name {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.1rem;
+      margin-right: 15px;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-completed {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+    }
+
+    .status-pending {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: var(--warning);
+    }
+
+    .status-cancelled {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger);
+    }
+
+    .prescription-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .prescription-section h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: var(--primary);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .prescription-section h3 i {
+      color: var(--primary);
+    }
+
+    .prescription-content {
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      line-height: 1.5;
+      color: #334155;
+      padding: 10px;
+      background: white;
+      border-radius: 5px;
+
+    }
+
+    .appointment-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid var(--light-gray);
+    }
+
+    .action-btn {
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-btn i {
+      font-size: 0.8rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      border: 1px solid var(--primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(79, 156, 249, 0.3);
+      color: white;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .rating-stars {
+      color: var(--warning);
+      margin-left: 5px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+      color: var(--gray);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--light-gray);
+      margin-bottom: 15px;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 15px;
+        justify-content: space-around;
+      }
+
+      nav a {
+        margin-right: 0;
+        font-size: 0.9rem;
+      }
+
+      .appointment-meta {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .appointment-actions {
+        flex-direction: column;
+      }
+
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .prescription-section {
+        padding: 12px;
+      }
+
+      .prescription-content {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav data-aos="fade-down">
+    <a href="{{ url_for('doctor.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="{{ url_for('doctor.profile') }}"><i class="fas fa-user"></i> Profile</a>
+    <a href="{{ url_for('doctor.view_history') }}"><i class="fas fa-history"></i> History</a>
+    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header" data-aos="fade-up">
+      <h2><i class="fas fa-calendar-check"></i> Appointment History</h2>
+    </div>
+
+    <div class="search-container" data-aos="zoom-in">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" placeholder="Search by patient name...">
+    </div>
+
+    <ul class="history-list" id="historyList">
+      {% for appt in history %}
+      <li class="appointment-card" data-aos="fade-up">
+        <div class="appointment-meta">
+          <span class="patient-name"><i class="fas fa-user-injured"></i> {{ appt.patient_name }}</span>
+          <span class="meta-item"><i class="far fa-calendar-alt"></i> {{ appt.date }}</span>
+          <span class="meta-item"><i class="far fa-clock"></i> {{ appt.slot_time }}</span>
+          <span class="status-badge status-{{ appt.status|lower }}">{{ appt.status }}</span>
+
+          {% if appt.rating %}
+          <span class="meta-item">
+            <i class="fas fa-star"></i> Rating:
+            <span class="rating-stars">
+              {% for i in range(1, 6) %}
+              {% if i <= appt.rating %} <i class="fas fa-star"></i>
+                {% else %}
+                <i class="far fa-star"></i>
+                {% endif %}
+                {% endfor %}
+            </span>
+          </span>
+          {% endif %}
+
+          {% if appt.review %}
+          <div
+            style="margin-top: 10px; background: #f8f9fa; padding: 12px 15px; border-left: 4px solid var(--primary); border-radius: 6px;">
+            <i class="fas fa-comment-dots" style="color: var(--primary); margin-right: 6px;"></i>
+            <strong>Feedback:</strong> {{ appt.review }}
+          </div>
+          {% endif %}
+        </div>
+
+        {% if appt.doctor_prescription %}
+        <div class="prescription-section">
+          <h3><i class="fas fa-prescription-bottle-alt"></i> Doctor Prescription</h3>
+          <div class="prescription-content">{{ appt.doctor_prescription }}</div>
+        </div>
+        {% endif %}
+
+        <div class="appointment-actions">
+          {% if appt.patient_report_file %}
+          <a href="{{ url_for('static', filename='uploads/' ~ appt.patient_report_file) }}" download
+            class="action-btn btn-primary">
+            <i class="fas fa-download"></i> Patient Report
+          </a>
+          {% endif %}
+
+          {% if appt.doctor_report_file %}
+          <a href="{{ url_for('static', filename='uploads/' ~ appt.doctor_report_file) }}" download
+            class="action-btn btn-primary">
+            <i class="fas fa-file-medical"></i> My Report
+          </a>
+          {% endif %}
+        </div>
+      </li>
+      {% else %}
+      <div class="empty-state" data-aos="fade-in">
+        <i class="far fa-calendar-times"></i>
+        <p>No appointment history found</p>
+      </div>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Search Script -->
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const historyList = document.getElementById('historyList').getElementsByClassName('appointment-card');
+
+    searchInput.addEventListener('keyup', function () {
+      const filter = this.value.toLowerCase();
+      for (let i = 0; i < historyList.length; i++) {
+        const card = historyList[i];
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(filter) ? '' : 'none';
+      }
+    });
+  </script>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800,
+      easing: 'ease-in-out'
+    });
+  </script>
+
+</body>
+
+</html>

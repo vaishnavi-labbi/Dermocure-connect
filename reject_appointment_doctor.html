@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reject Appointment | MediCare System</title>
+
+  <!-- ✅ AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --danger: #ff4757;
+      --danger-dark: #e84118;
+      --light: #f8f9fa;
+      --dark: #2f3542;
+      --gray: #747d8c;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #dfe4ea 100%);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--dark);
+    }
+
+    .reject-container {
+      width: 100%;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    .reject-box {
+      background: #fff;
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    
+    .reject-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--danger), #ff6b81);
+    }
+
+    .reject-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(255, 71, 87, 0.2);
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: var(--danger);
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--danger), #ff6b81);
+      border-radius: 3px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: var(--dark);
+      gap: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: var(--transition);
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2);
+    }
+    
+    textarea::placeholder {
+      color: #a4b0be;
+    }
+
+    .submit-btn {
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+    }
+    
+    .submit-btn:hover {
+      background: var(--danger-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .reject-box {
+        padding: 30px 20px;
+      }
+      
+      h2 {
+        font-size: 22px;
+      }
+      
+      .submit-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="reject-container">
+    <div class="reject-box" data-aos="fade-up" data-aos-duration="800">
+      <h2><i class="fas fa-calendar-times"></i> Reject Appointment</h2>
+      <form method="POST">
+        <div class="form-group">
+          <label for="reason">
+            <i class="fas fa-comment-alt"></i> Reason for rejection:
+          </label>
+          <textarea name="reason" id="reason" required 
+                   placeholder="Please provide a detailed reason for rejecting this appointment..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-ban"></i> Reject Appointment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ✅ AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+  </script>
+
+</body>
+</html>

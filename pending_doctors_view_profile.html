@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Profile | MediCare Admin</title>
+  
+  <!-- ✅ AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --danger: #f72585;
+      --danger-dark: #e5177b;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--dark);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 40px;
+      border-radius: var(--border-radius);
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: var(--box-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--danger));
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 30px;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--danger));
+      border-radius: 3px;
+    }
+
+    .doctor-image {
+      display: block;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 25px;
+      border: 5px solid #fff;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-details {
+      margin-bottom: 30px;
+    }
+
+    .detail-item {
+      display: flex;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+
+    .detail-item strong {
+      min-width: 160px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .detail-item p {
+      margin: 0;
+      flex: 1;
+      line-height: 1.6;
+    }
+
+    .rating {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(67, 97, 238, 0.1);
+      padding: 5px 12px;
+      border-radius: 20px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .rating i {
+      color: #ffc107;
+      margin-right: 5px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 25px;
+      background: var(--danger);
+      color: #fff;
+      text-decoration: none;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(247, 37, 133, 0.3);
+    }
+
+    a.button:hover {
+      background: var(--danger-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(247, 37, 133, 0.4);
+    }
+
+    a.button i {
+      margin-right: 8px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      color: var(--primary-dark);
+      transform: translateX(-3px);
+    }
+
+    .back-link i {
+      margin-right: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 30px 20px;
+      }
+
+      .detail-item {
+        flex-direction: column;
+      }
+
+      .detail-item strong {
+        margin-bottom: 5px;
+      }
+
+      .button-container {
+        flex-direction: column-reverse;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card" data-aos="zoom-in">
+      <h2>Dr. {{ doctor.full_name }}</h2>
+
+      {% if doctor.profile_pic %}
+        <img src="{{ url_for('static', filename='uploads/' ~ doctor.profile_pic) }}" alt="Profile Picture" class="doctor-image">
+      {% endif %}
+
+      <div class="profile-details">
+        <div class="detail-item">
+          <strong>WhatsApp Number:</strong>
+          <p>{{ doctor.whatsapp_number or 'Not provided' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Specialization:</strong>
+          <p>{{ doctor.specialization or 'Not specified' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>About:</strong>
+          <p>{{ doctor.about or 'No description provided.' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Hospital Name:</strong>
+          <p>{{ doctor.hospital_name or 'Not specified' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Hospital Code:</strong>
+          <p>{{ doctor.hospital_code or 'Not specified' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Doctor Code:</strong>
+          <p>{{ doctor.doctor_code or 'Not specified' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Address:</strong>
+          <p>{{ doctor.address or 'Not specified' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Education:</strong>
+          <p>{{ doctor.education or 'Not specified' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>City:</strong>
+          <p>{{ doctor.city or 'Not specified' }}</p>
+        </div>
+        <div class="detail-item">
+          <strong>Rating:</strong>
+          <p>
+            {% if average_rating %}
+              <span class="rating">
+                <i class="fas fa-star"></i>
+                {{ average_rating }}/5
+              </span>
+            {% else %}
+              Not yet rated
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <a href="{{ url_for('admin.dashboard') }}" class="back-link">
+          <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+  </script>
+
+</body>
+</html>

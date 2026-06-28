@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Healthcare System</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💼</text></svg>">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #3a7bd5;
+      --primary-dark: #2a5db0;
+      --secondary: #00d2ff;
+      --accent: #ffc107;
+      --danger: #e63946;
+      --success: #2a9d8f;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --white: #ffffff;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --card-shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    nav {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: var(--white);
+      margin-right: 1.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    nav a i {
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .revenue-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2.5rem;
+      border-left: 5px solid var(--success);
+      transition: all 0.3s ease;
+    }
+
+    .revenue-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .revenue-card h3 {
+      color: var(--success);
+      margin: 0 0 1rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .revenue-amount {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      color: var(--primary-dark);
+      margin: 2.5rem 0 1.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--secondary);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: var(--white);
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    ul li:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--primary);
+    }
+
+    .doctor-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .doctor-name i {
+      color: var(--primary);
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn i {
+      font-size: 0.875rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      color: var(--white);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-success:hover {
+      background: #21867a;
+      color: var(--white);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background: #c1121f;
+      color: var(--white);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .approved {
+      background: rgba(42, 157, 143, 0.2);
+      color: var(--success);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+      background: var(--light-gray);
+      border-radius: 8px;
+    }
+
+    .empty-state i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--gray);
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem;
+        justify-content: center;
+      }
+      
+      nav a {
+        margin: 0.5rem;
+      }
+      
+      .container {
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+      }
+      
+      .revenue-amount {
+        font-size: 1.8rem;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Navbar with Chat -->
+  <nav data-aos="fade-down">
+    <a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-check-circle"></i> Approvals</a>
+    <a href="{{ url_for('admin.appointments') }}"><i class="fas fa-calendar-alt"></i> Appointments</a>
+    <a href="{{ url_for('admin.patients') }}"><i class="fas fa-user-injured"></i> Patients</a>
+    <a href="{{ url_for('chat.chat_admins_doctors') }}"><i class="fas fa-comments"></i> Chat</a>
+    <a href="{{ url_for('auth.change_password') }}"><i class="fas fa-key"></i> Change Password</a>
+    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+
+  <div class="container" data-aos="fade-up">
+    <div class="revenue-card" data-aos="zoom-in">
+      <h3><i class="fas fa-chart-line"></i> System Revenue</h3>
+      <div class="revenue-amount">
+        <i class="fas fa-rupee-sign"></i> {{ total_revenue }}
+      </div>
+    </div>
+
+    <h3 data-aos="fade-right"><i class="fas fa-user-md"></i> Pending Doctors</h3>
+    <ul>
+      {% for doctor in pending_doctors %}
+        <li data-aos="fade-up" data-aos-duration="600">
+          <div class="doctor-name">
+            <i class="fas fa-user-md"></i> {{ doctor.full_name }}
+          </div>
+          <div class="action-btns">
+            <a href="{{ url_for('admin.doctor_profile', doctor_id=doctor._id) }}" class="btn btn-outline">
+              <i class="fas fa-eye"></i> View Profile
+            </a>
+            <a href="{{ url_for('admin.approve_doctor', doctor_id=doctor._id) }}" class="btn btn-success">
+              <i class="fas fa-check"></i> Approve
+            </a>
+            <a href="{{ url_for('admin.reject_doctor', doctor_id=doctor._id) }}" class="btn btn-danger">
+              <i class="fas fa-times"></i> Reject
+            </a>
+          </div>
+        </li>
+      {% else %}
+        <li class="empty-state" data-aos="fade-in">
+          <i class="far fa-smile"></i>
+          <p>No pending doctor approvals</p>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h3 data-aos="fade-right"><i class="fas fa-user-md"></i> Approved Doctors</h3>
+    <ul>
+      {% for doctor in approved_doctors %}
+        <li data-aos="fade-up" data-aos-duration="600">
+          <div class="doctor-name">
+            <i class="fas fa-user-md"></i> {{ doctor.full_name }}
+            <span class="status-badge approved">Approved</span>
+          </div>
+          <div class="action-btns">
+            <a href="{{ url_for('admin.doctor_profile', doctor_id=doctor._id) }}" class="btn btn-outline">
+              <i class="fas fa-eye"></i> View Profile
+            </a>
+          </div>
+        </li>
+      {% else %}
+        <li class="empty-state" data-aos="fade-in">
+          <i class="far fa-smile"></i>
+          <p>No approved doctors yet</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ 
+      once: true,
+      duration: 800,
+      easing: 'ease-out-quart'
+    });
+  </script>
+
+</body>
+</html>

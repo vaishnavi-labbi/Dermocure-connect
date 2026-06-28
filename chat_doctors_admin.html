@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat with Doctors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+
+    h3 {
+      color: #007bff;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    li a {
+      margin-left: 10px;
+      text-decoration: none;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+  <h3>Doctors</h3>
+  <ul>
+    {% for doctor in doctors %}
+      <li>
+        {{ doctor.full_name }} ({{ doctor.email }})
+        <a href="{{ url_for('chat.chat', receiver_id=doctor._id) }}">Start Chat</a>
+      </li>
+    {% else %}
+      <li>No doctors found.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

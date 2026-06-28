@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat with {{ receiver.full_name }}</title>
+  <!-- ✅ Socket.IO client -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      display: flex; flex-direction: column;
+      height: 100vh;
+      background: #ece5dd;
+    }
+
+    .chat-header {
+      background: #075E54;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 20px;
+      max-width: 60%;
+      clear: both;
+      word-wrap: break-word;
+    }
+
+    .sent {
+      background: #dcf8c6;
+      float: right;
+    }
+
+    .received {
+      background: #fff;
+      float: left;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background: #f0f0f0;
+      border-top: 1px solid #ddd;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .input-area button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      background: #075E54;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .input-area button:hover {
+      background: #054c44;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-header">
+    <button onclick="history.back()" style="background: none; border: none; color: var(--primary-color); font-weight: 500; margin-bottom: 1rem; cursor: pointer; font-size: 0.9rem; padding: 0;">
+    ← Back
+  </button> 
+    Chat with {{ receiver.full_name }}
+  </div>
+
+  <div class="messages" id="messages">
+    {% for msg in messages %}
+      <div class="message {% if msg.sender_id == current_user.id %}sent{% else %}received{% endif %}">
+        {{ msg.message }}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="message-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)" />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const socket = io();
+    const receiverId = "{{ receiver._id }}";
+    const currentUserId = "{{ current_user.id }}";
+
+    // ✅ Join personal room
+    socket.emit('join', { user_id: currentUserId });
+
+    function sendMessage() {
+      const input = document.getElementById('message-input');
+      const message = input.value.trim();
+      if (message !== "") {
+        socket.emit('send_message', {
+          receiver_id: receiverId,
+          message: message
+        });
+        input.value = "";
+        input.focus();
+      }
+    }
+
+    // ✅ Send on Enter key
+    function handleKeyPress(e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    }
+
+    // ✅ Receive messages
+    socket.on('receive_message', function(data) {
+      if (
+        (data.sender_id === currentUserId && data.receiver_id === receiverId) ||
+        (data.sender_id === receiverId && data.receiver_id === currentUserId)
+      ) {
+        const messages = document.getElementById('messages');
+        const div = document.createElement('div');
+        div.classList.add('message');
+        if (data.sender_id === currentUserId) {
+          div.classList.add('sent');
+        } else {
+          div.classList.add('received');
+        }
+        div.textContent = data.message;
+        messages.appendChild(div);
+        scrollToBottom();
+      }
+    });
+
+    function scrollToBottom() {
+      const messages = document.getElementById('messages');
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // ✅ Auto-scroll on load
+    window.onload = scrollToBottom;
+  </script>
+
+</body>
+</html>

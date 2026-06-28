@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Profile | MediConnect</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4f9cf9;
+      --primary-dark: #3a7bc8;
+      --primary-light: #e6f1ff;
+      --secondary: #f37a6f;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      color: var(--dark);
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .profile-container {
+      max-width: 700px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      padding: 30px;
+      text-align: center;
+      color: white;
+      position: relative;
+    }
+
+    .profile-header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: white;
+      transform: skewY(-3deg);
+      z-index: 1;
+    }
+
+    .profile-title {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 600;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-title i {
+      margin-right: 10px;
+    }
+
+    .profile-picture {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 5px solid white;
+      object-fit: cover;
+      margin: 0 auto 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+      transition: var(--transition);
+    }
+
+    .profile-picture:hover {
+      transform: scale(1.05);
+    }
+
+    .empty-picture {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: var(--light-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--gray);
+      font-size: 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-body {
+      padding: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid var(--light-gray);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(79, 156, 249, 0.2);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .file-input-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      background: var(--light);
+      border: 2px dashed var(--light-gray);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .file-input-label:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .file-input-label i {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(79, 156, 249, 0.2);
+    }
+
+    .rating-container {
+      text-align: center;
+      margin: 30px 0;
+      padding: 20px;
+      background: var(--light);
+      border-radius: 10px;
+    }
+
+    .rating-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .rating-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .stars {
+      color: var(--warning);
+      font-size: 1.2rem;
+      letter-spacing: 3px;
+    }
+
+    .empty-rating {
+      color: var(--gray);
+      font-style: italic;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      color: var(--primary);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      color: var(--primary-dark);
+      text-decoration: none;
+    }
+
+    .back-link i {
+      margin-right: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .profile-header {
+        padding: 20px;
+      }
+      
+      .profile-body {
+        padding: 30px 20px;
+      }
+      
+      .profile-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <div class="profile-card" data-aos="fade-up">
+      <div class="profile-header">
+        <h2 class="profile-title" data-aos="fade-down"><i class="fas fa-user-md"></i> Doctor Profile</h2>
+        
+        {% if doctor.profile_pic %}
+          <img src="{{ url_for('static', filename='uploads/' + doctor.profile_pic) }}" alt="Profile Picture" class="profile-picture" data-aos="zoom-in">
+        {% else %}
+          <div class="empty-picture" data-aos="zoom-in">
+            <i class="fas fa-user"></i>
+          </div>
+        {% endif %}
+      </div>
+      
+      <div class="profile-body">
+        <form method="POST" enctype="multipart/form-data" data-aos="fade-up">
+          <div class="form-group">
+            <label for="full_name"><i class="fas fa-user"></i> Full Name</label>
+            <input type="text" id="full_name" name="full_name" value="{{ doctor.full_name or '' }}" placeholder="Enter your full name">
+          </div>
+          
+          <div class="form-group">
+            <label for="specialization"><i class="fas fa-certificate"></i> Specialization</label>
+            <input type="text" id="specialization" name="specialization" value="{{ doctor.specialization or '' }}" placeholder="Enter your specialization">
+          </div>
+          
+          <div class="form-group">
+            <label for="about"><i class="fas fa-info-circle"></i> About</label>
+            <textarea id="about" name="about" placeholder="Tell patients about yourself and your experience">{{ doctor.about or '' }}</textarea>
+          </div><div class="form-group">
+  <label for="whatsapp_number"><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
+  <input type="text" id="whatsapp_number" name="whatsapp_number" value="{{ doctor.whatsapp_number or '' }}" placeholder="Enter your WhatsApp number">
+</div>
+
+<div class="form-group">
+  <label for="hospital_name"><i class="fas fa-hospital"></i> Hospital Name</label>
+  <input type="text" id="hospital_name" name="hospital_name" value="{{ doctor.hospital_name or '' }}" placeholder="Enter your hospital name">
+</div>
+
+<div class="form-group">
+  <label for="hospital_code"><i class="fas fa-code"></i> Hospital Code</label>
+  <input type="text" id="hospital_code" name="hospital_code" value="{{ doctor.hospital_code or '' }}" placeholder="Enter your hospital code">
+</div>
+
+<div class="form-group">
+  <label for="doctor_code"><i class="fas fa-user-md"></i> Doctor Code</label>
+  <input type="text" id="doctor_code" name="doctor_code" value="{{ doctor.doctor_code or '' }}" placeholder="Enter your doctor code">
+</div>
+
+<div class="form-group">
+  <label for="address"><i class="fas fa-map-marker-alt"></i> Address</label>
+  <input type="text" id="address" name="address" value="{{ doctor.address or '' }}" placeholder="Enter your address">
+</div>
+
+<div class="form-group">
+  <label for="city"><i class="fas fa-city"></i> City</label>
+  <input type="text" id="city" name="city" value="{{ doctor.city or '' }}" placeholder="Enter your city">
+</div>
+
+<div class="form-group">
+  <label for="education"><i class="fas fa-graduation-cap"></i> Education</label>
+  <input type="text" id="education" name="education" value="{{ doctor.education or '' }}" placeholder="Enter your education">
+</div>
+          
+          <div class="file-input-container">
+            <label for="profile_pic"><i class="fas fa-camera"></i> Profile Picture</label>
+            <label class="file-input-label" for="profile_pic">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Choose a profile picture...</span>
+            </label>
+            <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+          </div>
+          
+          <button type="submit" class="btn"><i class="fas fa-save"></i> Update Profile</button>
+        </form>
+        
+        <div class="rating-container" data-aos="fade-up">
+          <div class="rating-title">Average Rating</div>
+          {% if average_rating %}
+            <div class="rating-value">{{ average_rating }}/5</div>
+            <div class="stars">
+              {% for i in range(1, 6) %}
+                {% if i <= average_rating|int %}
+                  <i class="fas fa-star"></i>
+                {% elif i-0.5 <= average_rating %}
+                  <i class="fas fa-star-half-alt"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-rating">Not yet rated</div>
+          {% endif %}
+        </div>
+        
+        <a href="{{ url_for('doctor.dashboard') }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800,
+      easing: 'ease-in-out'
+    });
+    
+    // Update file input label with selected file name
+    document.getElementById('profile_pic').addEventListener('change', function(e) {
+      const fileName = e.target.files[0] ? e.target.files[0].name : 'Choose a profile picture...';
+      document.querySelector('.file-input-label span').textContent = fileName;
+    });
+  </script>
+
+</body>
+</html>

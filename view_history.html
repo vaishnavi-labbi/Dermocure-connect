@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment History | MediConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4f9cf9;
+      --primary-dark: #3a7bc8;
+      --primary-light: rgba(79, 156, 249, 0.1);
+      --secondary: #f37a6f;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --transition: all 0.3s ease;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 100%);
+      padding: 20px;
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    h2 {
+      color: var(--primary);
+      margin: 30px 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-light);
+      display: inline-block;
+      font-size: 1.5rem;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    h2 i {
+      margin-right: 10px;
+      color: var(--primary);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin: 15px 0 10px;
+      font-weight: 500;
+    }
+
+    .appointment-section {
+      margin-bottom: 40px;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #fff;
+      margin-bottom: 15px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    li::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(79, 156, 249, 0.05) 0%, rgba(79, 156, 249, 0.01) 100%);
+      z-index: 0;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    li:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    li:hover::before {
+      opacity: 1;
+    }
+
+    .appointment-info {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .appointment-info span {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .appointment-info .doctor-name {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .appointment-info .date-time {
+      color: var(--gray);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .appointment-info .reject-reason {
+      color: var(--danger);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px;
+      background: rgba(220, 53, 69, 0.05);
+      border-radius: 5px;
+    }
+
+    .appointment-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .action-btn {
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+    }
+
+    .action-btn i {
+      font-size: 0.8rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      border: 1px solid var(--primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(79, 156, 249, 0.3);
+      color: white;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: white;
+      border: 1px solid var(--success);
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+      border: 1px solid var(--danger);
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+      color: var(--gray);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--light-gray);
+      margin-bottom: 15px;
+      opacity: 0.7;
+    }
+
+    .empty-state p {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .status-badge {
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .status-completed {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+    }
+
+    .status-rejected {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger);
+    }
+
+    .prescription-container {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--dark);
+      white-space: pre-wrap;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    a.back-link {
+      display: inline-flex;
+      align-items: center;
+      margin: 2rem 0 1rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      transition: var(--transition);
+      padding: 8px 15px;
+      border-radius: 50px;
+      background: rgba(79, 156, 249, 0.1);
+    }
+
+    a.back-link i {
+      margin-right: 0.5rem;
+      transition: var(--transition);
+    }
+
+    a.back-link:hover {
+      color: var(--primary-dark);
+      transform: translateX(-5px);
+      background: rgba(79, 156, 249, 0.2);
+    }
+
+    a.back-link:hover i {
+      transform: translateX(-3px);
+    }
+    .stars {
+  display: flex;
+  gap: 5px;
+  font-size: 1.2rem;
+  color: gold;
+}
+
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+      }
+      
+      .appointment-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      .action-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+        margin: 20px 0 15px;
+      }
+      
+      .empty-state {
+        padding: 30px 20px;
+      }
+      
+      .empty-state i {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .appointment-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .empty-state i {
+        font-size: 2rem;
+      }
+      
+      .empty-state p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<!-- unchanged head & style block (same as yours) -->
+
+<body>
+
+  <div class="appointment-section">
+    <a href="{{ url_for('patient.dashboard') }}" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+  </div>
+
+  <div class="appointment-section">
+    <h2><i class="fas fa-check-circle"></i> Completed Appointments</h2>
+    <ul>
+      {% if completed %}
+        {% for appt in completed %}
+        <li>
+          <div class="appointment-info">
+            <span class="status-badge status-completed">Completed</span>
+            <span class="doctor-name"><i class="fas fa-user-md"></i> {{ appt.doctor_name }}</span>
+            <span class="date-time"><i class="far fa-calendar-alt"></i> {{ appt.date }} | <i class="far fa-clock"></i> {{ appt.slot_time }}</span>
+
+            {% if appt.doctor_prescription %}
+              <h3><i class="fas fa-prescription-bottle-alt"></i> Doctor Prescription</h3>
+              <div class="prescription-container">
+                {{ appt.doctor_prescription }}
+              </div>
+            {% endif %}
+
+            {% if appt.rating %}
+              <h3><i class="fas fa-star"></i> Your Rating</h3>
+             <div class="stars">
+  {% for i in range(1, 6) %}
+    {% if i <= appt.rating %}
+      <i class="fas fa-star"></i>
+    {% else %}
+      <i class="fas fa-star" style="color:#ccc;"></i>
+    {% endif %}
+  {% endfor %}
+</div>
+              {% if appt.review %}
+                <div style="margin-top: 10px; background: #f1f3f5; padding: 12px 15px; border-left: 4px solid var(--primary); border-radius: 6px;">
+                  <i class="fas fa-comment-dots" style="color: var(--primary); margin-right: 6px;"></i>
+                  <strong>Review:</strong> {{ appt.review }}
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+
+          <div class="appointment-actions">
+            {% if appt.patient_report_file %}
+              <a href="{{ url_for('static', filename='uploads/' ~ appt.patient_report_file) }}" download class="action-btn btn-primary">
+                <i class="fas fa-download"></i> Your Report
+              </a>
+            {% else %}
+              <a href="{{ url_for('patient.upload_report', appointment_id=appt._id) }}" class="action-btn btn-outline">
+                <i class="fas fa-upload"></i> Upload Report
+              </a>
+            {% endif %}
+
+            {% if appt.doctor_report_file %}
+              <a href="{{ url_for('static', filename='uploads/' ~ appt.doctor_report_file) }}" download class="action-btn btn-primary">
+                <i class="fas fa-file-medical"></i> Doctor Report
+              </a>
+            {% endif %}
+
+            {% if not appt.rating %}
+              <a href="{{ url_for('patient.rate_doctor', appointment_id=appt._id) }}" class="action-btn btn-success">
+                <i class="fas fa-star"></i> Rate Doctor
+              </a>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <i class="far fa-calendar-check"></i>
+          <p>No completed appointments found.</p>
+        </div>
+      {% endif %}
+    </ul>
+  </div>
+
+  <div class="appointment-section">
+    <h2><i class="fas fa-times-circle"></i> Rejected Appointments</h2>
+    <ul>
+      {% if rejected %}
+        {% for appt in rejected %}
+        <li>
+          <div class="appointment-info">
+            <span class="status-badge status-rejected">Rejected</span>
+            <span class="doctor-name"><i class="fas fa-user-md"></i> {{ appt.doctor_name }}</span>
+            <span class="date-time"><i class="far fa-calendar-alt"></i> {{ appt.date }} | <i class="far fa-clock"></i> {{ appt.slot_time }}</span>
+            {% if appt.reject_reason %}
+              <span class="reject-reason"><i class="fas fa-info-circle"></i> {{ appt.reject_reason }}</span>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <i class="far fa-calendar-times"></i>
+          <p>No rejected appointments found.</p>
+        </div>
+      {% endif %}
+    </ul>
+  </div>
+
+</body>
+</html>

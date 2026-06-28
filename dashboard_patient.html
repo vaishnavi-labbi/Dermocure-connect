@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Dashboard | Healthcare System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #e0e7ff;
+      --primary-dark: #3a0ca3;
+      --secondary: #3f37c9;
+      --success: #4cc9f0;
+      --success-dark: #4895ef;
+      --warning: #f8961e;
+      --danger: #f72585;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --rounded: 0.375rem;
+      --rounded-lg: 0.5rem;
+      --rounded-xl: 0.75rem;
+      --rounded-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    nav {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-left h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-left h2 i {
+      font-size: 1.25rem;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-right a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      position: relative;
+    }
+
+    .nav-right a:hover {
+      color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .nav-right a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-light);
+      transition: width 0.3s ease;
+    }
+
+    .nav-right a:hover::after {
+      width: 100%;
+    }
+
+    .nav-right a i {
+      font-size: 0.9rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--rounded-xl);
+      box-shadow: var(--shadow-md);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 5px solid var(--primary);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    h3 {
+      color: var(--primary-dark);
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    h3 i {
+      color: var(--primary);
+    }
+
+    h4 {
+      color: var(--secondary);
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin: 2rem 0 1.5rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    h4::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .search-form {
+      position: relative;
+      margin-bottom: 2rem;
+      max-width: 500px;
+    }
+
+    .search-form input[type="text"] {
+      padding: 0.9rem 1.5rem 0.9rem 3rem;
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      border-radius: var(--rounded-full);
+      outline: none;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      background-color: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-form input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .search-form i {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 1rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: var(--white);
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--primary);
+    }
+
+    ul li:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .appointment-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .appointment-info strong {
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .appointment-info span {
+      color: var(--gray);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .appointment-info span i {
+      width: 1rem;
+      color: var(--primary);
+      font-size: 0.8rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--rounded-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.75rem;
+    }
+
+    .status-pending {
+      background-color: #fff3bf;
+      color: #e67700;
+    }
+
+    .status-approved {
+      background-color: #d3f9d8;
+      color: #2b8a3e;
+    }
+
+    .status-completed {
+      background-color: #d0ebff;
+      color: #1971c2;
+    }
+
+    .appointment-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.25rem;
+      border-radius: var(--rounded-full);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-success:hover {
+      background: var(--success-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--gray);
+      background: var(--light-gray);
+      border-radius: var(--rounded-lg);
+      margin: 1rem 0;
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #e2e8f0;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state .subtext {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    /* Enhanced Active Appointments Styles */
+    .prescription-section {
+      width: 100%;
+      margin-top: 1.5rem;
+      background: var(--light-gray);
+      border-radius: var(--rounded-lg);
+      padding: 1.25rem;
+      border-left: 4px solid var(--success-dark);
+    }
+
+    .prescription-section h3 {
+      color: var(--success-dark);
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .prescription-section h3 i {
+      color: var(--success-dark);
+    }
+
+    .prescription-content {
+      white-space: pre-wrap;
+      line-height: 1.6;
+      color: var(--dark);
+      font-size: 0.95rem;
+    }
+
+    .whatsapp-btn {
+      background-color: #25D366 !important;
+      transition: all 0.3s ease;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #128C7E !important;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .report-section {
+      width: 100%;
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .nav-right {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .container {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+      }
+      
+      .card {
+        padding: 1.5rem;
+      }
+      
+      ul li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .appointment-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+
+      /* Enhanced responsive behavior */
+      .appointment-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        width: 100%;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .prescription-section {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .nav-right a {
+        font-size: 0.9rem;
+      }
+      
+      .search-form {
+        margin-bottom: 1.5rem;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+      }
+      
+      h4 {
+        font-size: 1.1rem;
+      }
+
+      .prescription-section h3 {
+        font-size: 1rem;
+      }
+      
+      .prescription-content {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav data-aos="fade-down">
+    <div class="nav-left">
+      <h2><i class="fas fa-heartbeat"></i> Patient Dashboard</h2>
+    </div>
+    <div class="nav-right">
+       <a href="http://127.0.0.1:8080"><i class="fas fa-key"></i>AI Test</a>
+      <a href="{{ url_for('auth.change_password') }}"><i class="fas fa-key"></i> Change Password</a>
+      <a href="{{ url_for('patient.view_history') }}"><i class="fas fa-history"></i> History</a>
+      <a href="{{ url_for('patient.view_doctors') }}"><i class="fas fa-user-md"></i> Doctors</a>
+      <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="container">
+    <!-- Approved Doctors Card -->
+    <div class="card" data-aos="fade-up" data-aos-delay="100">
+      <div class="card-header">
+        <h3><i class="fas fa-user-md"></i> Approved Doctors</h3>
+      </div>
+
+      <!-- Search Bar -->
+      <form method="GET" action="{{ url_for('patient.dashboard') }}" class="search-form" data-aos="fade-up" data-aos-delay="150">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          class="search"
+          name="search_query"
+          placeholder="Search doctors by name or specialization..."
+          value="{{ request.args.get('search_query', '') }}"
+          onkeyup="this.form.submit()"
+        >
+      </form>
+
+      <ul>
+        {% for doctor in doctors %}
+          <li data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+            <div class="appointment-info">
+              <strong>{{ doctor.full_name }}</strong>
+              <span><i class="fas fa-stethoscope"></i> {{ doctor.specialization or 'General Practitioner' }}</span>
+            </div>
+            <a href="{{ url_for('patient.doctor_profile', doctor_id=doctor._id) }}" class="btn btn-primary">
+              <i class="fas fa-user-circle"></i> View Profile
+            </a>
+          </li>
+        {% else %}
+          <li class="empty-state" data-aos="fade-up">
+            <i class="fas fa-user-md"></i>
+            <p>No approved doctors available</p>
+            <p class="subtext">Please check back later or contact support</p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Appointments Card -->
+    <div class="card" data-aos="fade-up" data-aos-delay="200">
+      <div class="card-header">
+        <h3><i class="fas fa-calendar-check"></i> Your Appointments</h3>
+      </div>
+
+      <!-- Pending Appointments -->
+      <h4 data-aos="fade-up" data-aos-delay="250"><i class="far fa-clock"></i> Pending Approval</h4>
+      <ul>
+        {% for appt in appointments if appt.status == 'pending' %}
+          <li data-aos="fade-up" data-aos-delay="{{ loop.index * 50 + 250 }}">
+            <div class="appointment-info">
+              <strong>Dr. {{ appt.doctor_name }}</strong>
+              <span><i class="far fa-calendar"></i> {{ appt.date }} at {{ appt.slot_time }}</span>
+              <span class="status-badge status-pending"><i class="fas fa-clock"></i> {{ appt.status }}</span>
+            </div>
+          </li>
+        {% else %}
+          <li class="empty-state" data-aos="fade-up" data-aos-delay="300">
+            <i class="far fa-calendar-check"></i>
+            <p>No pending appointments</p>
+            <p class="subtext">Book an appointment with one of our doctors</p>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Enhanced Active Appointments Section -->
+      <h4 data-aos="fade-up" data-aos-delay="350"><i class="fas fa-procedures"></i> Active Appointments</h4>
+      <ul>
+        {% for appt in appointments if appt.status == 'approved' %}
+          <li data-aos="fade-up" data-aos-delay="{{ loop.index * 50 + 350 }}">
+            <div class="appointment-info">
+              <strong>Dr. {{ appt.doctor_name }}</strong>
+              <span><i class="far fa-calendar"></i> {{ appt.date }} at {{ appt.slot_time }}</span>
+              <span class="status-badge status-approved"><i class="fas fa-check-circle"></i> {{ appt.status }}</span>
+            </div>
+            <div class="appointment-actions">
+              {% if appt.patient_report_file %}
+                <a href="{{ url_for('static', filename='uploads/' ~ appt.patient_report_file) }}" download class="btn btn-outline">
+                  <i class="fas fa-file-download"></i> Your Report
+                </a>
+              {% else %}
+                <a href="{{ url_for('patient.upload_report', appointment_id=appt._id) }}" class="btn btn-success">
+                  <i class="fas fa-file-upload"></i> Upload Report
+                </a>
+              {% endif %}
+
+              {% if appt.doctor_report_file %}
+                <a href="{{ url_for('static', filename='uploads/' ~ appt.doctor_report_file) }}" download class="btn btn-outline">
+                  <i class="fas fa-file-medical"></i> Doctor's Report
+                </a>
+              {% endif %}
+              
+              {% if appt.doctor_whatsapp %}
+                <a href="https://wa.me/{{ appt.doctor_whatsapp }}?text=Hello Doctor, I have a question about my appointment on {{ appt.date }} at {{ appt.slot_time }}."
+                   target="_blank"
+                   class="btn whatsapp-btn">
+                  <i class="fab fa-whatsapp"></i> Chat Doctor
+                </a>
+              {% endif %}
+            </div>
+            
+            {% if appt.doctor_prescription %}
+              <div class="prescription-section">
+                <h3><i class="fas fa-prescription-bottle-alt"></i> Doctor Prescription</h3>
+                <div class="prescription-content">{{ appt.doctor_prescription }}</div>
+              </div>
+            {% endif %}
+          </li>
+        {% else %}
+          <li class="empty-state" data-aos="fade-up" data-aos-delay="400">
+            <i class="far fa-calendar-alt"></i>
+            <p>No active appointments</p>
+            <p class="subtext">Your approved appointments will appear here</p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800,
+      easing: 'ease-out-quart'
+    });
+  </script>
+</body>
+</html>

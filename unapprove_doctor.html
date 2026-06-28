@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unapprove Doctor | Medical Admin</title>
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --danger-color: #ef233c;
+      --danger-hover: #d90429;
+      --text-color: #2b2d42;
+      --light-gray: #edf2f4;
+      --border-radius: 10px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    
+    .card {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      max-width: 550px;
+      width: 90%;
+      transition: var(--transition);
+      border-top: 4px solid var(--danger-color);
+    }
+    
+    .card:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+    
+    h2 {
+      text-align: center;
+      color: var(--danger-color);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      font-size: 1.8rem;
+    }
+    
+    .doctor-info {
+      background-color: var(--light-gray);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    
+    .doctor-info strong {
+      color: var(--primary-color);
+    }
+    
+    label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #ced4da;
+      border-radius: var(--border-radius);
+      min-height: 120px;
+      font-family: inherit;
+      transition: var(--transition);
+      resize: vertical;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    textarea::placeholder {
+      color: #adb5bd;
+    }
+    
+    button {
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.8rem;
+      border: none;
+      background: var(--danger-color);
+      color: #fff;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 1rem;
+      width: 100%;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    button:hover {
+      background: var(--danger-hover);
+      transform: translateY(-2px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    @media (max-width: 576px) {
+      .card {
+        padding: 1.5rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Unapprove Doctor</h2>
+    <form method="POST">
+      <div class="doctor-info">
+        <p><strong>Doctor:</strong> {{ doctor.full_name }}</p>
+      </div>
+      <label for="reason">Reason for Unapproving:</label>
+      <textarea id="reason" name="reason" required placeholder="Please provide a detailed reason for unapproving this doctor..."></textarea>
+      <button type="submit">Unapprove Doctor</button>
+    </form>
+  </div>
+</body>
+</html>

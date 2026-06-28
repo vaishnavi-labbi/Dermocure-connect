@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Payment | MediCare</title>
+
+  <!-- ✅ AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --success: #28a745;
+      --success-dark: #218838;
+      --danger: #dc3545;
+      --danger-dark: #c82333;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border-radius: 16px;
+      --box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--dark);
+      padding: 20px;
+    }
+
+    .payment-container {
+      width: 100%;
+      max-width: 520px;
+      perspective: 1000px;
+    }
+
+    .payment-box {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      transform-style: preserve-3d;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .payment-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+    }
+
+    .payment-box:hover {
+      transform: translateY(-8px) rotateX(2deg);
+      box-shadow: 0 20px 50px rgba(67, 97, 238, 0.2);
+    }
+
+    h2 {
+      margin: 1rem 0 1.5rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.8rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 4px;
+    }
+
+    .payment-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--success));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .appointment-details {
+      background: rgba(67, 97, 238, 0.05);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: left;
+      border: 1px solid rgba(67, 97, 238, 0.1);
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed rgba(67, 97, 238, 0.2);
+    }
+
+    .detail-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .detail-item strong {
+      color: var(--primary);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .detail-item span {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .qr-container {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 25px rgba(67, 97, 238, 0.1);
+      display: inline-block;
+      border: 1px solid rgba(67, 97, 238, 0.1);
+    }
+
+    .qr-container img {
+      width: 220px;
+      height: 220px;
+      border-radius: 12px;
+      padding: 12px;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+
+    .qr-container img:hover {
+      transform: scale(1.03);
+    }
+
+    .qr-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .confirmation-checkbox {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .confirmation-checkbox label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--dark);
+      gap: 0.5rem;
+      background: rgba(67, 97, 238, 0.05);
+      padding: 0.8rem 1.2rem;
+      border-radius: 50px;
+      transition: var(--transition);
+    }
+
+    .confirmation-checkbox label:hover {
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    .confirmation-checkbox input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .payment-btn {
+      background: linear-gradient(135deg, var(--primary), var(--success));
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+      width: 100%;
+      margin: 0.5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .payment-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+    
+    .payment-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(67, 97, 238, 0.4);
+    }
+    
+    .payment-btn:hover::before {
+      left: 100%;
+    }
+
+    .cancel-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--gray);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .cancel-link:hover {
+      color: var(--danger);
+      transform: translateX(-5px);
+    }
+
+    .secure-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    @media (max-width: 576px) {
+      .payment-box {
+        padding: 1.5rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      .qr-container img {
+        width: 180px;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="payment-container">
+    <div class="payment-box" data-aos="fade-up" data-aos-duration="800">
+      <div class="payment-icon">
+        <i class="fas fa-lock"></i>
+      </div>
+      
+      <h2>Secure Payment</h2>
+      
+      <div class="appointment-details">
+        <div class="detail-item">
+          <strong><i class="far fa-calendar-alt"></i> Appointment Date:</strong>
+          <span>{{ slot.date }}</span>
+        </div>
+        <div class="detail-item">
+          <strong><i class="far fa-clock"></i> Time Slot:</strong>
+          <span>{{ slot.time }}</span>
+        </div>
+        <div class="detail-item">
+          <strong><i class="fas fa-rupee-sign"></i> Amount:</strong>
+          <span>₹500</span>
+        </div>
+      </div>
+
+      <div class="qr-container" data-aos="zoom-in">
+        <div class="qr-title">
+          <i class="fas fa-qrcode"></i> Scan to Pay Securely
+        </div>
+        <img src="{{ url_for('static', filename='images/payment_qr.png') }}" alt="Payment QR Code">
+      </div>
+
+      <form method="POST">
+        <div class="confirmation-checkbox" data-aos="fade-up">
+          <label>
+            <input type="checkbox" name="confirm_payment" required>
+            I confirm I've completed the payment
+          </label>
+        </div>
+
+        <button type="submit" class="payment-btn" data-aos="fade-up" data-aos-delay="100">
+          <i class="fas fa-check-circle"></i> Confirm Appointment
+        </button>
+      </form>
+
+      <a href="{{ url_for('patient.dashboard') }}" class="cancel-link" data-aos="fade-up" data-aos-delay="150">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+
+      <div class="secure-badge" data-aos="fade-up" data-aos-delay="200">
+        <i class="fas fa-shield-alt"></i> 256-bit SSL Secure Payment
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800,
+      easing: 'ease-out-quart'
+    });
+  </script>
+
+</body>
+</html>
